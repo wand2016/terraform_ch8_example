@@ -8,7 +8,7 @@ resource "aws_kms_key" "mykey" {
 }
 
 resource "aws_s3_bucket" "private" {
-  bucket = "terraform-practice-wand-20200308"
+  bucket = "terraform-practice-wand-20200308-1"
 
   versioning {
     enabled = true
@@ -78,7 +78,7 @@ data "aws_iam_policy_document" "private" {
 
 
 resource "aws_s3_bucket" "public" {
-  bucket = "terraform-practice-wand-20200308-public"
+  bucket = "terraform-practice-wand-20200308-1-public"
   acl = "public-read"
 
   cors_rule {
@@ -90,7 +90,7 @@ resource "aws_s3_bucket" "public" {
 }
 
 resource "aws_s3_bucket" "alb_log" {
-  bucket = "terraform-practice-wand-20200308-log"
+  bucket = "terraform-practice-wand-20200308-1-log"
 
   lifecycle_rule {
     enabled = true
@@ -325,4 +325,24 @@ resource "aws_lb" "example" {
     module.https_sg.security_group_id,
     module.https_redirect_sg.security_group_id
   ]
+}
+
+resource "aws_lb_listener" "http" {
+  load_balancer_arn = aws_lb.example.arn
+  port = "80"
+  protocol = "HTTP"
+
+  default_action {
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "application/json"
+      message_body = "{\"message\":\"これは『HTTP』です\"}"
+      status_code = "200"
+    }
+  }
+}
+
+output "public_dns" {
+  value = aws_lb.example.dns_name
 }
