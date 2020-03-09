@@ -8,7 +8,7 @@ resource "aws_kms_key" "mykey" {
 }
 
 resource "aws_s3_bucket" "private" {
-  bucket = "terraform-practice-wand-20200308-1"
+  bucket = "terraform-practice-wand-20200309-1"
 
   versioning {
     enabled = true
@@ -78,7 +78,7 @@ data "aws_iam_policy_document" "private" {
 
 
 resource "aws_s3_bucket" "public" {
-  bucket = "terraform-practice-wand-20200308-1-public"
+  bucket = "terraform-practice-wand-20200309-1-public"
   acl = "public-read"
 
   cors_rule {
@@ -90,7 +90,7 @@ resource "aws_s3_bucket" "public" {
 }
 
 resource "aws_s3_bucket" "alb_log" {
-  bucket = "terraform-practice-wand-20200308-1-log"
+  bucket = "terraform-practice-wand-20200309-1-log"
 
   lifecycle_rule {
     enabled = true
@@ -308,7 +308,7 @@ resource "aws_lb" "example" {
   load_balancer_type = "application"
   internal = false
   idle_timeout = 60
-  enable_deletion_protection = true
+  enable_deletion_protection = false
 
   subnets = [
     aws_subnet.public_0.id,
