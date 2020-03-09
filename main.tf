@@ -376,3 +376,8 @@ resource "aws_route53_record" "example_certificate" {
   zone_id = data.aws_route53_zone.example.id
   ttl = 60
 }
+
+resource "aws_acm_certificate_validation" "exmaple" {
+  certificate_arn = aws_acm_certificate.example.arn
+  validation_record_fqdns = [aws_route53_record.example_certificate.fqdn]
+}
