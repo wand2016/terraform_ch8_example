@@ -381,3 +381,21 @@ resource "aws_acm_certificate_validation" "exmaple" {
   certificate_arn = aws_acm_certificate.example.arn
   validation_record_fqdns = [aws_route53_record.example_certificate.fqdn]
 }
+
+
+resource "aws_lb_listener" "https" {
+  load_balancer_arn = aws_lb.example.arn
+  port = "443"
+  protocol = "HTTPS"
+  certificate_arn = aws_acm_certificate.example.arn
+
+  default_action {
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "application/json"
+      message_body = "{\"message\":\"これは『HTTPS』です\"}"
+      status_code = "200"
+    }
+  }
+}
